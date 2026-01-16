@@ -61,7 +61,7 @@ void printColored(const char* str, const Color* color,int start,int end);
 
 void getInputData(CurrentGame& game);
 void extractSaveGame(CurrentGame& game);
-void saveGame(const CurrentGame& game);
+void saveGame(CurrentGame& game);
 void exitGame();
 bool isSaveFileCompatable(const CurrentGame& game);
 
@@ -390,7 +390,7 @@ void extractSaveGame(CurrentGame& game)
 			game.ifs.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 			game.ifs >> game.errors;
 			game.ifs.close();
-			if (!isPartOfWordCorr(game.color, 0, lenght) || lenght != strlenght(game.corr)|| isSaveFileCompatable(game))
+			if (!isPartOfWordCorr(game.color, 0, lenght) || lenght != strlenght(game.corr) || !isSaveFileCompatable(game))
 			{
 				std::cout << "Error! Unsuported file format!\n";
 				exitGame();
@@ -670,7 +670,7 @@ void exitGame()
 
 bool isSaveFileCompatable(const CurrentGame& game)
 {
-	for (int i = 0; i < game.text[i]; i++)
+	for (int i = 0; game.text[i]; i++)
 	{
 		if ((game.text[i] == game.corr[i]) && (game.color[i] == RED))
 			return false;
@@ -683,6 +683,10 @@ bool isSaveFileCompatable(const CurrentGame& game)
 		else if (!isLetter(game.text[i]) && (game.color[i] == RED))
 			return false;
 		else if ((game.text[i] != game.corr[i]) && (game.color[i] != RED))
+			return false;
+		else if (game.color[i] < 0 || game.color[i] > 2)
+			return false;
+		else if (game.errors < 0)
 			return false;
 	}
 	return true;
