@@ -1,3 +1,17 @@
+/**
+*
+* Solution to course project # 12
+* Introduction to programming course
+* Faculty of Mathematics and Informatics of Sofia University
+* Winter semester 2025/2026
+*
+* @author Stefan Stefanov
+* @idnumber 3MI0600574
+* @compiler VS
+*
+* <file with all code for the project>
+*
+*/
 #include <iostream>
 #include <fstream>
 
@@ -671,8 +685,20 @@ void exitGame()
 bool isSaveFileCompatable(const CurrentGame& game)
 {
 	for (int i = 0; game.text[i]; i++)
-	{
-		if ((game.text[i] == game.corr[i]) && (game.color[i] == RED))
+	{	
+		if (game.color[i] == RED)
+		{
+			bool reversable = false;
+			for (int j = 0; j < 6; j++)
+			{
+				if (game.text[i] == invertAtPosition(game.corr[i], j))
+					reversable = true;
+			}
+			if (!reversable)
+				return false;
+		}
+
+		else if ((game.text[i] == game.corr[i]) && (game.color[i] == RED))
 			return false;
 		else if (isBlank(game.text[i]) && !isBlank(game.corr[i]))
 			return false;
